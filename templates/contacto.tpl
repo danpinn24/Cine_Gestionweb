@@ -6,9 +6,9 @@
         <div class="contact-column contact-data">
             <h3>Datos de contacto</h3>
             <p>📧 <strong>Email:</strong> info@cineapp.com</p>
-            <p>📞 <strong>Teléfono:</strong> (011) 4444-5555</p>
+            <p>📞 <strong>Teléfono:</strong> (0249) 4444-5555</p>
             <p>🕒 <strong>Horario:</strong> Lunes a Domingo de 12:00 a 00:00 hs.</p>
-            <p>🏢 <strong>Oficinas:</strong> Calle Falsa 123, Piso 4.</p>
+            <p>🏢 <strong>Oficinas:</strong> Paseo del Banco, Pinto esq Rodriguez.</p>
         </div>
 
         <div class="contact-column">

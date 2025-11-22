@@ -51,10 +51,10 @@ class DB {
         // Datos de prueba iniciales (solo si está vacía)
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM salas");
         if ($stmt->fetchColumn() == 0) {
-            $this->pdo->exec("INSERT INTO salas (nombre, capacidad) VALUES ('Sala Premium', 40)");
+            $this->pdo->exec("INSERT INTO salas (nombre, capacidad) VALUES ('Sala Premium 3D', 40)");
             $this->pdo->exec("INSERT INTO salas (nombre, capacidad) VALUES ('Sala 2D', 50)");
             $this->pdo->exec("INSERT INTO peliculas (titulo, genero, horario, id_sala) VALUES ('Gladiador 2', 'Acción', '20:00', 1)");
-            $this->pdo->exec("INSERT INTO peliculas (titulo, genero, horario, id_sala) VALUES ('Moana 2', 'Animación', '17:00', 2)");
+            $this->pdo->exec("INSERT INTO peliculas (titulo, genero, horario, id_sala) VALUES ('La noche del Demonio', 'Terror', '17:00', 2)");
         }
     }
 
