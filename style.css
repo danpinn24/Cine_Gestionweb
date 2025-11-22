@@ -1,0 +1,357 @@
+
+:root {
+    --primary-color: #f75d59; /* Rojo Cine */
+    --secondary-color: #3b3a3c; /* Gris Oscuro */
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --table-header: #e0e0e0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.container {
+    padding: 20px;
+}
+
+h2 {
+    color: var(--secondary-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* --- Tablas --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: var(--table-header);
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* --- Botones y Links --- */
+.btn-primary {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #e44b48;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.actions a {
+    margin-right: 10px;
+}
+
+/* --- Formularios --- */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="time"],
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+}
+
+/* Estilo para el botón de Submit en formularios */
+.form-submit-btn {
+    margin-top: 20px;
+    width: auto;
+}
+
+/* Contenedor Principal */
+.netflix-container {
+    background-color: #141414; /* Negro Netflix */
+    padding: 20px;
+    margin-bottom: 30px;
+    color: white;
+    border-radius: 8px;
+    overflow: hidden; /* Para que nada se salga */
+}
+
+.netflix-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.slider-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* La fila que se mueve */
+.slider {
+    display: flex;
+    gap: 10px; /* Espacio entre pelis */
+    overflow-x: auto; /* Permite scroll */
+    scroll-behavior: smooth; /* Movimiento suave */
+    padding: 10px 0; /* Espacio para el efecto zoom */
+    
+    /* Ocultar la barra de scroll fea */
+    scrollbar-width: none; /* Firefox */
+}
+.slider::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+/* Las Tarjetas (Imágenes) */
+.netflix-card {
+    min-width: 150px; /* Ancho fijo */
+    transition: transform 0.3s;
+    cursor: pointer;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.netflix-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 4px;
+}
+
+/* Efecto ZOOM al pasar el mouse */
+.netflix-card:hover {
+    transform: scale(1.1); /* Crece un 10% */
+    z-index: 10;
+    box-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+
+/* Botones (Flechas) */
+.handle {
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    font-size: 3rem;
+    padding: 0 10px;
+    cursor: pointer;
+    z-index: 100;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.handle:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.left-handle { left: 0; border-radius: 0 5px 5px 0; }
+.right-handle { right: 0; border-radius: 5px 0 0 5px; }
+
+
+/* --- ESTILOS DEL CARRUSEL DE ESTRENOS --- */
+
+/* Contenedor Principal */
+.netflix-container {
+    background-color: #141414;
+    padding: 20px 50px; /* Espacio lateral para las flechas */
+    margin-bottom: 30px;
+    color: white;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.netflix-title {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    border-left: 4px solid #e50914; /* Rojo marca */
+    padding-left: 10px;
+}
+
+.slider-wrapper {
+    position: relative;
+}
+
+/* La fila de películas */
+.slider {
+    display: flex;
+    gap: 10px; /* Espacio entre tarjetas */
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    
+    /* Ocultar barra de scroll */
+    scrollbar-width: none; 
+}
+.slider::-webkit-scrollbar { display: none; }
+
+/* Las Tarjetas */
+.netflix-card {
+    /* FÓRMULA MATEMÁTICA: 
+       25% del ancho total = 4 películas.
+       Restamos 10px para compensar el 'gap' (espacio entre ellas) */
+    flex: 0 0 calc(25% - 10px); 
+    min-width: calc(25% - 10px);
+    
+    aspect-ratio: 2/3; /* Mantiene proporción vertical pase lo que pase */
+    border-radius: 4px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.netflix-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.netflix-card:hover {
+    transform: scale(1.05); /* Zoom suave */
+    z-index: 2;
+}
+
+/* Flechas de Navegación */
+.handle {
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: white;
+    font-size: 3rem;
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 45px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+    padding-bottom: 10px;
+    line-height: 0;
+}
+
+.handle:hover { background: rgba(229, 9, 20, 0.8); }
+.left-handle { left: -45px; }
+.right-handle { right: -45px; }
+
+
+/* --- ESTILOS DEL ENCABEZADO Y MENÚ --- */
+
+header {
+    background-color: #141414; /* Fondo oscuro tipo Netflix */
+    color: white;
+    padding: 20px 0;
+    text-align: center; /* Centra el título y el menú */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    color: #e50914; /* Rojo marca */
+    text-transform: uppercase;
+}
+
+/* El menú de navegación */
+.main-nav ul {
+    list-style: none; /* Quita los puntos de la lista */
+    padding: 0;
+    margin: 15px 0 0 0; /* Espacio arriba (entre título y menú) */
+    display: flex;
+    justify-content: center; /* Alinea los items al centro */
+    gap: 30px; /* Espacio entre cada palabra */
+}
+
+.main-nav a {
+    text-decoration: none; /* Quita el subrayado */
+    color: #cccccc; /* Gris claro */
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+    text-transform: uppercase;
+}
+
+/* Efecto al pasar el mouse */
+.main-nav a:hover {
+    color: white; /* Se pone blanco brillante */
+    border-bottom: 2px solid #e50914; /* Línea roja abajo */
+    padding-bottom: 5px;
+}
+
