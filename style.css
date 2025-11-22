@@ -355,3 +355,101 @@ header h1 {
     padding-bottom: 5px;
 }
 
+
+   
+        /* Estilos del Carrusel */
+        .netflix-container {
+            background-color: #141414;
+            padding: 20px 50px;
+            margin-bottom: 30px;
+            color: white;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        .netflix-title { margin: 0 0 15px 0; font-size: 1.5rem; border-left: 4px solid #e50914; padding-left: 10px; }
+        .slider-wrapper { position: relative; }
+        .slider { display: flex; gap: 10px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; }
+        .slider::-webkit-scrollbar { display: none; }
+        .netflix-card { flex: 0 0 calc(25% - 10px); min-width: calc(25% - 10px); aspect-ratio: 2/3; border-radius: 4px; position: relative; cursor: pointer; transition: transform 0.3s ease; }
+        .netflix-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .netflix-card:hover { transform: scale(1.05); z-index: 2; }
+        .handle { background: rgba(0,0,0,0.5); border: none; color: white; font-size: 3rem; position: absolute; top: 0; bottom: 0; width: 45px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; line-height: 0; padding-bottom: 10px; }
+        .handle:hover { background: rgba(229, 9, 20, 0.8); }
+        .left-handle { left: -45px; }
+        .right-handle { right: -45px; }
+  
+
+
+
+/* --- SECCIONES ESTÁTICAS (Nosotros, Complejos, Contacto) --- */
+
+/* Caja blanca genérica para contenido */
+.content-box {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* Tarjetas de Complejos */
+.complex-card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd; /* Borde sutil */
+    border-left: 5px solid var(--primary-color); /* Borde de color a la izquierda */
+    border-radius: 5px;
+    transition: transform 0.2s;
+}
+
+.complex-card:hover {
+    transform: translateX(5px); /* Pequeño movimiento al pasar el mouse */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.complex-card h3 {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* Layout de Contacto (2 columnas) */
+.contact-layout {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap; /* Se adapta a móbiles */
+}
+
+.contact-column {
+    flex: 1; /* Ocupan el mismo ancho */
+    min-width: 300px; /* No se achican demasiado */
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.contact-column h3 {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+.contact-data p {
+    margin: 15px 0;
+    font-size: 1.1em;
+}
+
+/* Ajuste específico para el textarea del formulario */
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: inherit;
+    resize: vertical; /* Permite estirar solo verticalmente */
+}

@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-11-20 21:16:35
+/* Smarty version 5.5.1, created on 2025-11-22 16:49:03
   from 'file:base.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_691f7723d06111_99632595',
+  'unifunc' => 'content_6921db6fca93c6_69568635',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '703ec1be5e6ac1843cbefbe3941637326249fbc3' => 
     array (
       0 => 'base.tpl',
-      1 => 1763587582,
+      1 => 1763826519,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_691f7723d06111_99632595 (\Smarty\Template $_smarty_tpl) {
+function content_6921db6fca93c6_69568635 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\CINE_Web\\templates';
 ?><!DOCTYPE html>
 <html lang="es">
@@ -39,9 +39,9 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\CINE_Web\\templates';
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.php?action=home">Inicio</a></li>
-                    <li><a href="#">Nosotros</a></li>
-                    <li><a href="#">Complejos</a></li>
-                    <li><a href="#">Contacto</a></li>
+                    <li><a href="index.php?action=nosotros">Nosotros</a></li>
+                    <li><a href="index.php?action=complejos">Complejos</a></li>
+                    <li><a href="index.php?action=contacto">Contacto</a></li>
                 </ul>
             </nav>
         </div>

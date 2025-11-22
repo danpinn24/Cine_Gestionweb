@@ -14,9 +14,9 @@
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.php?action=home">Inicio</a></li>
-                    <li><a href="#">Nosotros</a></li>
-                    <li><a href="#">Complejos</a></li>
-                    <li><a href="#">Contacto</a></li>
+                    <li><a href="index.php?action=nosotros">Nosotros</a></li>
+                    <li><a href="index.php?action=complejos">Complejos</a></li>
+                    <li><a href="index.php?action=contacto">Contacto</a></li>
                 </ul>
             </nav>
         </div>

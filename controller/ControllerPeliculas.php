@@ -10,6 +10,26 @@ class ControllerPeliculas extends AppController {
         parent::__construct($db);
     }
 
+public function nosotros() {
+        $this->render('base.tpl', [
+            'titulo' => 'Sobre Nosotros',
+            'contenido_tpl' => 'nosotros.tpl'
+        ]);
+    }
+
+    public function complejos() {
+        $this->render('base.tpl', [
+            'titulo' => 'Nuestras Sedes',
+            'contenido_tpl' => 'complejos.tpl'
+        ]);
+    }
+
+    public function contacto() {
+        $this->render('base.tpl', [
+            'titulo' => 'Contáctanos',
+            'contenido_tpl' => 'contacto.tpl'
+        ]);
+    }
  public function mostrarCartelera() {
     // 1. ¿El usuario eligió una fecha? Si no, usamos la de HOY.
     $fecha_filtro = isset($_GET['fecha']) ? $_GET['fecha'] : date('Y-m-d');

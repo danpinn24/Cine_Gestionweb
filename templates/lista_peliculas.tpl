@@ -1,31 +1,6 @@
 <div class="container">
     <h2>Catálogo Actual: {$titulo}</h2>
 
-    {literal}
-    <style>
-        /* Estilos del Carrusel */
-        .netflix-container {
-            background-color: #141414;
-            padding: 20px 50px;
-            margin-bottom: 30px;
-            color: white;
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-        .netflix-title { margin: 0 0 15px 0; font-size: 1.5rem; border-left: 4px solid #e50914; padding-left: 10px; }
-        .slider-wrapper { position: relative; }
-        .slider { display: flex; gap: 10px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; }
-        .slider::-webkit-scrollbar { display: none; }
-        .netflix-card { flex: 0 0 calc(25% - 10px); min-width: calc(25% - 10px); aspect-ratio: 2/3; border-radius: 4px; position: relative; cursor: pointer; transition: transform 0.3s ease; }
-        .netflix-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .netflix-card:hover { transform: scale(1.05); z-index: 2; }
-        .handle { background: rgba(0,0,0,0.5); border: none; color: white; font-size: 3rem; position: absolute; top: 0; bottom: 0; width: 45px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; line-height: 0; padding-bottom: 10px; }
-        .handle:hover { background: rgba(229, 9, 20, 0.8); }
-        .left-handle { left: -45px; }
-        .right-handle { right: -45px; }
-    </style>
-    {/literal}
 
     <div class="netflix-container">
         <h3 class="netflix-title">🍿 Próximamente en Cines</h3>
@@ -34,29 +9,29 @@
             <button class="handle left-handle" id="btn-left">‹</button>
             
             <div class="slider" id="slider">
-                <div class="netflix-card" title="Mufasa">
-                    <img src="https://placehold.co/400x600/111/FFF?text=Mufasa" alt="Mufasa">
+                <div class="netflix-card">
+                    <img src="img/barco.jpg">
                 </div>
-                <div class="netflix-card" title="Sonic 3">
-                    <img src="https://placehold.co/400x600/003366/FFF?text=Sonic+3" alt="Sonic 3">
+                <div class="netflix-card">
+                    <img src="img/guardianes.jpg">
                 </div>
-                <div class="netflix-card" title="Capitán América">
-                    <img src="https://placehold.co/400x600/800000/FFF?text=Capitan+America" alt="Captain America">
+                <div class="netflix-card" >
+                    <img src="img/shrek.jpg">
                 </div>
-                 <div class="netflix-card" title="Minecraft">
-                    <img src="https://placehold.co/400x600/2ea043/FFF?text=Minecraft" alt="Minecraft">
+                 <div class="netflix-card" >
+                    <img src="img/scream.jpg">
                 </div>
                 <div class="netflix-card" title="Karate Kid">
-                    <img src="https://placehold.co/400x600/333/FFF?text=Karate+Kid" alt="Karate Kid">
+                    <img src="img/avengers.jpg">
                 </div>
                 <div class="netflix-card" title="Elio">
-                    <img src="https://placehold.co/400x600/444/FFF?text=Elio" alt="Elio">
+                    <img src="img/OIP.webp">
                 </div>
-                <div class="netflix-card" title="Nosferatu">
-                    <img src="https://placehold.co/400x600/000/FFF?text=Nosferatu" alt="Nosferatu">
+                <div class="netflix-card" >
+                    <img src="img/toy.jpg">
                 </div>
-                 <div class="netflix-card" title="Mickey 17">
-                    <img src="https://placehold.co/400x600/555/FFF?text=Mickey+17" alt="Mickey 17">
+                 <div class="netflix-card" >
+                    <img src="img/mario.jpg">
                 </div>
             </div>
 
