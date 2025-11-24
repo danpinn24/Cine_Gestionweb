@@ -9,15 +9,25 @@ require_once __DIR__ . '/../model/ModelReserva.php';
 class DB {
     private static $instance = null;
     private $pdo; 
-    private static $db_file = __DIR__ . '/cine.db'; 
+    
+    // CONFIGURACIÓN MYSQL (Ajusta si tienes contraseña en XAMPP/WAMP)
+    private $host = 'localhost';
+    private $db_name = 'cine_db';
+    private $user = 'root';
+    private $password = ''; // En XAMPP suele ser vacío, en MAMP es 'root'
 
     private function __construct() {
         try {
-            $this->pdo = new PDO('sqlite:' . self::$db_file); 
+            // CAMBIO: Conexión a MySQL en lugar de SQLite
+            $dsn = "mysql:host={$this->host};dbname={$this->db_name};charset=utf8";
+            $this->pdo = new PDO($dsn, $this->user, $this->password);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            // Comentar init() si ya creaste la base de datos manualmente en phpMyAdmin
+            // O dejarlo si quieres que el código intente crear las tablas
             $this->init(); 
         } catch (PDOException $e) {
-            die("Error de Base de Datos: " . $e->getMessage());
+            die("Error de Base de Datos: " . $e->getMessage() . "<br>Asegúrate de haber creado la base de datos 'cine_db' en phpMyAdmin.");
         }
     }
     
@@ -29,26 +39,41 @@ class DB {
     }
     
     private function init() {
-        $this->pdo->exec("PRAGMA foreign_keys = ON;");
+        // CAMBIO: Sintaxis MySQL (ENGINE=InnoDB y AUTO_INCREMENT)
         
-        $this->pdo->exec("CREATE TABLE IF NOT EXISTS salas (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, capacidad INTEGER NOT NULL)");
-        $this->pdo->exec("CREATE TABLE IF NOT EXISTS peliculas (id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT NOT NULL, genero TEXT, horario TEXT NOT NULL, id_sala INTEGER, FOREIGN KEY (id_sala) REFERENCES salas(id))");
-        $this->pdo->exec("CREATE TABLE IF NOT EXISTS clientes (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, email TEXT UNIQUE NOT NULL)");
+        $this->pdo->exec("CREATE TABLE IF NOT EXISTS salas (
+            id INT AUTO_INCREMENT PRIMARY KEY, 
+            nombre VARCHAR(100) NOT NULL, 
+            capacidad INT NOT NULL
+        ) ENGINE=InnoDB");
+
+        $this->pdo->exec("CREATE TABLE IF NOT EXISTS peliculas (
+            id INT AUTO_INCREMENT PRIMARY KEY, 
+            titulo VARCHAR(100) NOT NULL, 
+            genero VARCHAR(50), 
+            horario VARCHAR(10) NOT NULL, 
+            id_sala INT, 
+            FOREIGN KEY (id_sala) REFERENCES salas(id)
+        ) ENGINE=InnoDB");
+
+        $this->pdo->exec("CREATE TABLE IF NOT EXISTS clientes (
+            id INT AUTO_INCREMENT PRIMARY KEY, 
+            nombre VARCHAR(100) NOT NULL, 
+            email VARCHAR(100) UNIQUE NOT NULL
+        ) ENGINE=InnoDB");
+
        $this->pdo->exec("CREATE TABLE IF NOT EXISTS reservas (
-        id INTEGER PRIMARY KEY AUTOINCREMENT, 
-        id_pelicula INTEGER NOT NULL, 
-        id_cliente INTEGER NOT NULL, 
-        fecha_reserva TEXT, 
-        fecha_funcion TEXT,  -- <--- NUEVA COLUMNA
-        cantidad_entradas INTEGER NOT NULL DEFAULT 1, 
-        FOREIGN KEY (id_pelicula) REFERENCES peliculas(id), 
-        FOREIGN KEY (id_cliente) REFERENCES clientes(id)
-    )");
+            id INT AUTO_INCREMENT PRIMARY KEY, 
+            id_pelicula INT NOT NULL, 
+            id_cliente INT NOT NULL, 
+            fecha_reserva DATETIME, 
+            fecha_funcion DATE, 
+            cantidad_entradas INT NOT NULL DEFAULT 1, 
+            FOREIGN KEY (id_pelicula) REFERENCES peliculas(id), 
+            FOREIGN KEY (id_cliente) REFERENCES clientes(id)
+        ) ENGINE=InnoDB");
     
-    // ... (Inserts de prueba quedan igual)
-
-
-        // Datos de prueba iniciales (solo si está vacía)
+        // Datos de prueba iniciales
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM salas");
         if ($stmt->fetchColumn() == 0) {
             $this->pdo->exec("INSERT INTO salas (nombre, capacidad) VALUES ('Sala Premium 3D', 40)");
@@ -66,9 +91,7 @@ class DB {
         return new Pelicula($data['titulo'], $data['genero'], $data['horario'], $data['id_sala'], $data['id']);
     }
     
-    // --- FUNCIONES CRÍTICAS PARA QUE NO FALLE ---
-
-    // 1. Obtener o Crear Cliente (NUEVA - SI FALTA ESTA, DA PANTALLA BLANCA)
+    // 1. Obtener o Crear Cliente
     public function obtenerIdCliente($nombre, $email) {
         $stmt = $this->pdo->prepare("SELECT id FROM clientes WHERE email = ?");
         $stmt->execute([$email]);
@@ -85,49 +108,42 @@ class DB {
 
     // 2. Registrar Reserva
    public function registrarReserva(Reserva $reserva) {
-    // Agregamos fecha_funcion al INSERT
     $sql = "INSERT INTO reservas (id_pelicula, id_cliente, fecha_reserva, fecha_funcion, cantidad_entradas) VALUES (?, ?, ?, ?, ?)";
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute([
         $reserva->getIdPelicula(),
         $reserva->getIdCliente(),
         $reserva->getFechaReserva(),
-        $reserva->getFechaFuncion(), // <--- GUARDAMOS LA FECHA ELEGIDA
+        $reserva->getFechaFuncion(),
         $reserva->getCantidadEntradas()
     ]);
 }
 
     // 3. Cartelera con Stock actualizado
-   // Ahora acepta un parámetro $fecha
-public function getCarteleraDetallada($fecha = null): array {
-    
-    // Si no nos pasan fecha, usamos HOY
-    if ($fecha == null) {
-        $fecha = date('Y-m-d');
+    public function getCarteleraDetallada($fecha = null): array {
+        if ($fecha == null) {
+            $fecha = date('Y-m-d');
+        }
+        // NOTA: En MySQL a veces COALESCE requiere cuidado con NULLs, pero esta query es estándar y funciona bien.
+        $sql = "
+            SELECT 
+                p.id, p.titulo, p.genero, p.horario, p.id_sala,
+                s.nombre AS sala_nombre, s.capacidad,
+                SUM(COALESCE(r.cantidad_entradas, 0)) AS entradas_reservadas
+            FROM peliculas p
+            JOIN salas s ON p.id_sala = s.id
+            LEFT JOIN reservas r ON p.id = r.id_pelicula AND r.fecha_funcion = ?
+            GROUP BY p.id, p.titulo, p.genero, p.horario, p.id_sala, s.nombre, s.capacidad
+            ORDER BY p.horario ASC
+        ";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$fecha]); 
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
-
-    // Modificamos el SQL para usar el signo de pregunta (?) en la fecha
-    $sql = "
-        SELECT 
-            p.id, p.titulo, p.genero, p.horario, p.id_sala,
-            s.nombre AS sala_nombre, s.capacidad,
-            SUM(COALESCE(r.cantidad_entradas, 0)) AS entradas_reservadas
-        FROM peliculas p
-        JOIN salas s ON p.id_sala = s.id
-        -- Aquí filtramos por la fecha que elegimos
-        LEFT JOIN reservas r ON p.id = r.id_pelicula AND r.fecha_funcion = ?
-        GROUP BY p.id, p.titulo, p.genero, p.horario, p.id_sala, s.nombre, s.capacidad
-        ORDER BY p.horario ASC
-    ";
-    
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([$fecha]); // Pasamos la fecha al SQL
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
-}
 
     // --- RESTO DEL CRUD ---
     public function getTodasLasReservas(): array {
-    // Asegúrate de que dice r.* (esto trae TODAS las columnas, incluida la nueva fecha_funcion)
     $sql = "SELECT r.*, c.nombre as cliente_nombre, c.email as cliente_email, p.titulo as pelicula_titulo, s.nombre as sala_nombre 
             FROM reservas r 
             JOIN clientes c ON r.id_cliente = c.id 
@@ -138,6 +154,7 @@ public function getCarteleraDetallada($fecha = null): array {
     return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 }
     public function getTopPeliculasReservadas(int $limit = 5): array {
+        // MySQL requiere PDO::PARAM_INT explícito en LIMIT si las emulaciones están activadas, pero bindValue lo maneja bien.
         $sql = "SELECT p.titulo, p.genero, SUM(r.cantidad_entradas) as total_entradas FROM reservas r JOIN peliculas p ON r.id_pelicula = p.id GROUP BY p.id, p.titulo, p.genero ORDER BY total_entradas DESC LIMIT ?";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(1, $limit, PDO::PARAM_INT);
@@ -174,7 +191,7 @@ public function getCarteleraDetallada($fecha = null): array {
         $stmt->execute(["%$termino%"]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-// Calcula cuántos asientos quedan libres para una película específica
+
     public function getDisponibilidad($id_pelicula) {
         $sql = "SELECT s.capacidad - COALESCE(SUM(r.cantidad_entradas), 0) as disponibles
                 FROM peliculas p
@@ -185,19 +202,19 @@ public function getCarteleraDetallada($fecha = null): array {
         $stmt->execute([$id_pelicula]);
         return (int)$stmt->fetchColumn();
     }
-public function getDisponibilidadPorFecha($id_pelicula, $fecha) {
-    // 1. Capacidad total
-    $sqlSala = "SELECT s.capacidad FROM peliculas p JOIN salas s ON p.id_sala = s.id WHERE p.id = ?";
-    $stmt = $this->pdo->prepare($sqlSala);
-    $stmt->execute([$id_pelicula]);
-    $capacidad = $stmt->fetchColumn();
+    public function getDisponibilidadPorFecha($id_pelicula, $fecha) {
+        // 1. Capacidad total
+        $sqlSala = "SELECT s.capacidad FROM peliculas p JOIN salas s ON p.id_sala = s.id WHERE p.id = ?";
+        $stmt = $this->pdo->prepare($sqlSala);
+        $stmt->execute([$id_pelicula]);
+        $capacidad = $stmt->fetchColumn();
 
-    // 2. Ocupados SOLO en esa fecha
-    $sqlReservas = "SELECT SUM(cantidad_entradas) FROM reservas WHERE id_pelicula = ? AND fecha_funcion = ?";
-    $stmt2 = $this->pdo->prepare($sqlReservas);
-    $stmt2->execute([$id_pelicula, $fecha]);
-    $ocupadas = (int)$stmt2->fetchColumn();
+        // 2. Ocupados SOLO en esa fecha
+        $sqlReservas = "SELECT SUM(cantidad_entradas) FROM reservas WHERE id_pelicula = ? AND fecha_funcion = ?";
+        $stmt2 = $this->pdo->prepare($sqlReservas);
+        $stmt2->execute([$id_pelicula, $fecha]);
+        $ocupadas = (int)$stmt2->fetchColumn();
 
-    return $capacidad - $ocupadas;
-}
+        return $capacidad - $ocupadas;
+    }
 }
