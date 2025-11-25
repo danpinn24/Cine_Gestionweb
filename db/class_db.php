@@ -142,6 +142,9 @@ class DB {
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
 
+public function getTodosLosClientes() {
+        return $this->pdo->query("SELECT * FROM clientes")->fetchAll(PDO::FETCH_ASSOC);
+    }
     // --- RESTO DEL CRUD ---
     public function getTodasLasReservas(): array {
     $sql = "SELECT r.*, c.nombre as cliente_nombre, c.email as cliente_email, p.titulo as pelicula_titulo, s.nombre as sala_nombre 
